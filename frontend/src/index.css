@@ -1,0 +1,229 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-app text-text-primary font-sans antialiased;
+  background-image: radial-gradient(circle at 10% 0%, rgba(111, 168, 75, 0.08), transparent 40%),
+    radial-gradient(circle at 90% 10%, rgba(37, 99, 235, 0.05), transparent 35%);
+  background-attachment: fixed;
+}
+
+::selection {
+  @apply bg-brand/25;
+}
+
+*:focus-visible {
+  outline: 2px solid #6FA84B;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* thin, quiet scrollbars for panels that scroll a lot (chat, tables) */
+.scroll-thin::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.scroll-thin::-webkit-scrollbar-thumb {
+  background: rgba(22, 27, 16, 0.14);
+  border-radius: 999px;
+}
+.scroll-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(22, 27, 16, 0.24);
+}
+.scroll-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ---------- reusable "surface" helpers (replace old white/[x] overlays) ---------- */
+/* subtle tinted fill for inputs sitting on a white card */
+.field-surface {
+  background-color: rgba(111, 168, 75, 0.05);
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.field-surface:focus {
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(111, 168, 75, 0.14);
+}
+/* quiet hover wash for rows / list items on light backgrounds */
+.hover-surface {
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.hover-surface:hover {
+  background-color: rgba(22, 27, 16, 0.035);
+}
+.active-surface {
+  background-color: rgba(111, 168, 75, 0.09);
+}
+
+/* glassy card, used on the landing hero */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* ---------- motion ---------- */
+
+/* live status dot */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+.live-dot {
+  animation: pulse-dot 1.6s ease-in-out infinite;
+}
+
+/* orchestrator trace steps fading/sliding in sequentially */
+@keyframes trace-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.trace-step {
+  animation: trace-in 0.35s ease-out both;
+}
+
+/* generic fade+rise entrance, used for messages, rows, cards */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up {
+  animation: fade-up 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.animate-fade-in {
+  animation: fade-in 0.18s ease-out both;
+}
+
+/* modal / dropdown entrance */
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.96) translateY(4px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.animate-scale-in {
+  animation: scale-in 0.18s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* mobile drawer slide */
+@keyframes slide-in-left {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+.animate-slide-in-left {
+  animation: slide-in-left 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* skeleton loading shimmer */
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #EEF3F2 25%, #E3EBEA 37%, #EEF3F2 63%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+
+/* subtle typing/thinking dots */
+@keyframes bounce-dot {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.5; }
+  40% { transform: translateY(-3px); opacity: 1; }
+}
+.typing-dot {
+  animation: bounce-dot 1.2s ease-in-out infinite;
+}
+
+/* soft ambient blobs for hero / empty states */
+@keyframes blob-float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(14px, -18px) scale(1.06); }
+  66% { transform: translate(-12px, 10px) scale(0.96); }
+}
+.blob {
+  animation: blob-float 9s ease-in-out infinite;
+  filter: blur(50px);
+}
+.blob-delay {
+  animation-delay: 2.5s;
+}
+
+/* gradient text, for hero headlines / brand accents */
+.text-gradient {
+  background: linear-gradient(135deg, #4F7D34, #6FA84B 55%, #2563EB);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* lift + glow on hover, for cards and interactive tiles */
+.hover-lift {
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.18s ease, border-color 0.18s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 40px -14px rgba(22, 27, 16, 0.18);
+}
+
+/* animated underline for text links */
+.link-underline {
+  position: relative;
+  text-decoration: none;
+}
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.22s ease;
+}
+.link-underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* subtle shine sweep across primary buttons on hover */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.btn-shine::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 20%, rgba(255, 255, 255, 0.5) 50%, transparent 80%);
+  transform: translateX(-120%);
+  transition: transform 0.55s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+.btn-shine:hover::before {
+  transform: translateX(120%);
+}
+
+/* icon tile bounce-in, staggered via inline animation-delay */
+@keyframes pop-in {
+  0% { opacity: 0; transform: scale(0.85); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.animate-pop-in {
+  animation: pop-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

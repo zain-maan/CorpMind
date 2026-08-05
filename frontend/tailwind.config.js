@@ -1,0 +1,81 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ["./index.html", "./src/**/*.{js,jsx}"],
+  theme: {
+    extend: {
+      colors: {
+        brand: {
+          DEFAULT: "#6FA84B",
+          dark: "#4F7D34",
+          darker: "#3E642A",
+          tint: "#8FC369",
+          surface: "rgba(111, 168, 75, 0.10)",
+          glow: "#6FA84B",
+          glow2: "#8FC369",
+        },
+        // kept dark on purpose — used for the sidebar, on-brand button text,
+        // and modal/drawer scrims so the light theme still has contrast anchors
+        ink: "#161B10",
+        inkdeep: "#10140C",
+        app: "#F6F8F2",
+        card: "#FFFFFF",
+        border: "rgba(22, 27, 16, 0.09)",
+        text: {
+          primary: "#1B2115",
+          muted: "#5B6353",
+          faint: "#8A9180",
+        },
+        domain: {
+          hr: "#6FA84B",
+          hrbg: "rgba(111, 168, 75, 0.12)",
+          hrtext: "#3E7A25",
+          finance: "#D97706",
+          financebg: "rgba(217, 119, 6, 0.12)",
+          financetext: "#B45F04",
+          it: "#2563EB",
+          itbg: "rgba(37, 99, 235, 0.12)",
+          ittext: "#1D4ED8",
+          legal: "#7C3AED",
+          legalbg: "rgba(124, 58, 237, 0.12)",
+          legaltext: "#6D28D9",
+          restricted: "#B91C1C",
+          restrictedbg: "rgba(185, 28, 28, 0.12)",
+          restrictedtext: "#B91C1C",
+        },
+        status: {
+          successbg: "rgba(111, 168, 75, 0.14)",
+          successtext: "#3E7A25",
+          warnbg: "rgba(217, 119, 6, 0.14)",
+          warntext: "#B45F04",
+          dangerbg: "rgba(220, 38, 38, 0.12)",
+          dangertext: "#DC2626",
+          infobg: "rgba(37, 99, 235, 0.12)",
+          infotext: "#1D4ED8",
+        },
+      },
+      fontFamily: {
+        brand: ["Poppins", "Inter", "sans-serif"],
+        heading: ["Poppins", "sans-serif"],
+        display: ["'Red Hat Display'", "Poppins", "sans-serif"],
+        sans: ["Poppins", "Inter", "sans-serif"],
+        mono: ["'JetBrains Mono'", "monospace"],
+      },
+      boxShadow: {
+        card: "0 2px 10px rgba(22, 27, 16, 0.06), 0 1px 2px rgba(22, 27, 16, 0.04)",
+        float: "0 20px 40px -12px rgba(22, 27, 16, 0.16), 0 4px 12px rgba(22, 27, 16, 0.06)",
+        glow: "0 0 0 4px rgba(111, 168, 75, 0.14)",
+        "glow-lg": "0 8px 30px rgba(111, 168, 75, 0.25)",
+      },
+      backgroundImage: {
+        "brand-gradient": "linear-gradient(135deg, #6FA84B 0%, #8FC369 100%)",
+        "app-glow": "radial-gradient(circle at top left, rgba(111,168,75,0.10), transparent 45%), radial-gradient(circle at bottom right, rgba(37,99,235,0.06), transparent 40%)",
+      },
+      borderRadius: {
+        card: "16px",
+        cardlg: "24px",
+        pill: "999px",
+      },
+    },
+  },
+  plugins: [],
+};

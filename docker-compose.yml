@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: corpmind_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: corpmind
+      POSTGRES_PASSWORD: corpmind
+      POSTGRES_DB: corpmind
+    ports:
+      - "5432:5432"
+    volumes:
+      - corpmind_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U corpmind"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    container_name: corpmind_backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://corpmind:corpmind@postgres:5432/corpmind
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+
+volumes:
+  corpmind_pg_data:
