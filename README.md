@@ -1,180 +1,298 @@
-# CorpMind
+# 🧠 CorpMind
 
-**Role-aware, multi-agent internal knowledge assistant.**
+> **Role-Aware Multi-Agent Enterprise Knowledge Assistant**
 
-One chat interface, one login, for an entire company — smart enough to
-know which department a question belongs to, and who is allowed to see
-the answer.
+A secure AI-powered internal knowledge assistant that enables organizations to search company knowledge, automate workflows, and answer employee questions using only approved internal documents.
 
-## What It Does
+---
 
-- Employees ask questions in plain English ("what's our leave policy?",
-  "can I expense a client dinner?")
-- An **Orchestrator agent** classifies the question and routes it to the
-  right **specialist agent** (HR / Finance / IT / Legal)
-- Specialist agents answer **strictly from the company's own uploaded
-  documents**, with citations — no hallucination, no guessing
-- Cross-department questions get answers from multiple agents, merged
-  into one response
-- The same assistant can **draft actions** — a leave application, an
-  expense request — and route them to HR for review, instead of the
-  employee writing and emailing it manually
-- Every employee's chat is completely private, even from admins
-- Access control is **structural**: enforced at the database and vector
-  search layer, not just as an instruction to the AI
+## ✨ Overview
 
-## Tech Stack
+CorpMind provides a single intelligent chat interface for an entire organization. Instead of searching through emails, PDFs, and policy documents, employees simply ask questions in natural language.
 
-| Layer | Technology |
-|---|---|
-| Frontend | React + Vite + Tailwind CSS |
-| Backend | FastAPI (Python, async, modular monolith) |
-| Relational DB | PostgreSQL (SQLAlchemy async + Alembic migrations) |
-| Vector search | Qdrant Cloud — one isolated collection per knowledge domain |
-| Embeddings | FastEmbed (local, no per-query API cost) |
-| LLM reasoning | Groq API (routing, grounded answering, action drafting) |
-| Auth | JWT, role- and branch-scoped |
+The system intelligently identifies the appropriate department, retrieves relevant information from company documents, and generates grounded responses with citations while enforcing strict access control.
 
-## Project Structure
+---
 
-\`\`\`
+## 🚀 Key Features
+
+* 💬 Natural language chat interface
+* 🤖 Multi-Agent AI architecture
+* 🎯 Intelligent query routing through an Orchestrator Agent
+* 👨‍💼 Department-specific specialist agents (HR, Finance, IT, Legal)
+* 📄 Retrieval-Augmented Generation (RAG) using company documents
+* 📚 Citation-based responses with zero hallucination policy
+* 🔐 Role & Branch based access control
+* 🏢 Multi-company and multi-branch architecture
+* 📝 AI-generated leave and expense request drafting
+* 📨 HR approval workflow
+* 🔒 Private chat history for every employee
+* ⚡ Local embeddings with FastEmbed for low-cost retrieval
+* ☁️ Cloud vector search powered by Qdrant
+
+---
+
+## 🏗️ System Workflow
+
+```text
+Employee
+    │
+    ▼
+Chat Interface
+    │
+    ▼
+Orchestrator Agent
+    │
+    ├────────► HR Agent
+    ├────────► Finance Agent
+    ├────────► IT Agent
+    └────────► Legal Agent
+              │
+              ▼
+     Retrieve Company Knowledge
+              │
+              ▼
+     Citation-Based AI Response
+```
+
+---
+
+# 🛠 Tech Stack
+
+| Category              | Technology                  |
+| --------------------- | --------------------------- |
+| 🎨 Frontend           | React + Vite + Tailwind CSS |
+| ⚙️ Backend            | FastAPI (Python)            |
+| 🗄 Database           | PostgreSQL                  |
+| 🔍 Vector Database    | Qdrant Cloud                |
+| 🧠 Embeddings         | FastEmbed                   |
+| 🤖 LLM                | Groq API                    |
+| 🔑 Authentication     | JWT                         |
+| 🐳 Containerization   | Docker                      |
+| 🔄 Database Migration | Alembic                     |
+
+---
+
+# 📂 Project Structure
+
+```text
 corpmind/
+│
 ├── backend/
 │   ├── app/
-│   │   ├── core/              # config, database, security, dependencies
-│   │   ├── models/            # SQLAlchemy models (company, branch, user,
-│   │   │                      # document, chat, action)
-│   │   ├── schemas/           # Pydantic request/response schemas
-│   │   ├── modules/           # API routers, one folder per domain:
-│   │   │                      # auth, branches, users, documents, chat, actions
-│   │   ├── agents/            # orchestrator, specialist agent, action agent
-│   │   └── main.py            # FastAPI entrypoint
-│   ├── alembic/                # DB migrations
-│   ├── scripts/                 # one-off scripts (e.g. Qdrant collection init)
-│   ├── storage/                 # uploaded document files (gitignored)
+│   │   ├── agents/
+│   │   ├── core/
+│   │   ├── models/
+│   │   ├── modules/
+│   │   ├── schemas/
+│   │   └── main.py
+│   │
+│   ├── alembic/
+│   ├── scripts/
+│   ├── storage/
 │   ├── requirements.txt
 │   └── .env.example
+│
 ├── frontend/
 │   ├── src/
-│   │   ├── api/                # axios client / API calls
-│   │   ├── components/         # shared UI components
-│   │   ├── context/             # auth context
-│   │   ├── pages/                # route-level pages (Chat, etc.)
+│   │   ├── api/
+│   │   ├── components/
+│   │   ├── context/
+│   │   ├── pages/
 │   │   └── main.jsx
+│   │
 │   ├── package.json
 │   └── .env.example
+│
 ├── docker-compose.yml
 ├── .gitignore
 └── README.md
-\`\`\`
+```
 
-## User Roles & Hierarchy
+---
 
-\`\`\`
-super_admin  →  creates branches, creates branch_admins
-branch_admin →  creates HR accounts, creates employee accounts
-hr           →  uploads/manages documents, creates employee accounts,
-                 reviews action requests (leave/expense drafts)
-employee     →  uses the chat assistant, submits action requests
-\`\`\`
+# 👥 User Roles
 
-Every user is scoped to a `role` + `branch_id`. This combination drives
-every access-control check in the system — document visibility, chat
-history, action requests, and Qdrant retrieval are all filtered by it.
+```text
+Super Admin
+      │
+      ▼
+Branch Admin
+      │
+      ▼
+HR
+      │
+      ▼
+Employee
+```
 
-## Local Development Setup
+### Responsibilities
 
-### Prerequisites
-- Python 3.11+ (3.13 works, requires flexible dependency versions — see
-  `requirements.txt`)
-- Node.js
-- A PostgreSQL database (local install or hosted)
-- A Qdrant Cloud account (free tier) — https://cloud.qdrant.io
-- A Groq API key — https://console.groq.com
+* 👑 **Super Admin**
 
-### Backend
+  * Create companies and branches
+  * Manage branch administrators
 
-\`\`\`bash
+* 🏢 **Branch Admin**
+
+  * Manage HR accounts
+  * Manage employee accounts
+
+* 👨‍💼 **HR**
+
+  * Upload company documents
+  * Manage knowledge base
+  * Review leave & expense requests
+
+* 👤 **Employee**
+
+  * Ask questions
+  * Search company knowledge
+  * Submit leave & expense requests
+
+---
+
+# ⚙️ Local Development
+
+## Prerequisites
+
+* Python 3.11+
+* Node.js
+* PostgreSQL
+* Qdrant Cloud
+* Groq API Key
+
+---
+
+## Backend Setup
+
+```bash
 cd backend
-python -m venv venv
-source venv/bin/activate        # Windows: venv\\Scripts\\activate
-pip install -r requirements.txt
-cp .env.example .env
-\`\`\`
 
-Edit `.env` with your actual values:
-- `DATABASE_URL` — must use the `postgresql+asyncpg://` scheme (async
-  driver required)
-- `JWT_SECRET_KEY` — any long random string
-- `QDRANT_URL` / `QDRANT_API_KEY` — from your Qdrant Cloud cluster
-- `GROK_API_KEY` / `GROK_API_BASE` / `GROK_MODEL` — Groq credentials
-  (variable names say "GROK" for historical reasons, but point at Groq's
-  OpenAI-compatible endpoint)
+python -m venv venv
+
+# Windows
+venv\Scripts\activate
+
+# Linux / macOS
+source venv/bin/activate
+
+pip install -r requirements.txt
+
+cp .env.example .env
+```
+
+Update the `.env` file with:
+
+* DATABASE_URL
+* JWT_SECRET_KEY
+* QDRANT_URL
+* QDRANT_API_KEY
+* GROQ_API_KEY
+* GROQ_MODEL
 
 Run migrations:
-\`\`\`bash
+
+```bash
 alembic upgrade head
-\`\`\`
+```
 
-Initialize Qdrant collections (creates one collection per knowledge
-domain + payload index):
-\`\`\`bash
+Initialize Qdrant:
+
+```bash
 python scripts/init_qdrant_collections.py
-\`\`\`
+```
 
-Start the server:
-\`\`\`bash
+Run the backend:
+
+```bash
 uvicorn app.main:app --reload
-\`\`\`
-API docs available at `http://localhost:8000/docs`.
+```
 
-### Frontend
+API Documentation:
 
-\`\`\`bash
+```
+http://localhost:8000/docs
+```
+
+---
+
+## Frontend Setup
+
+```bash
 cd frontend
+
 npm install
+
 cp .env.example .env
+
 npm run dev
-\`\`\`
-App available at `http://localhost:5173`.
+```
 
-## API Overview
+Application:
 
-| Endpoint group | Purpose |
-|---|---|
-| `/api/auth` | signup (creates company + super_admin), login, current user |
-| `/api/branches` | branch creation/listing (super_admin) |
-| `/api/users` | role-hierarchy-enforced user creation/listing |
-| `/api/documents` | HR document upload, listing, soft-delete |
-| `/api/chat` | conversations + messages — routes questions through the orchestrator |
-| `/api/actions` | HR review (approve/reject) of leave/expense drafts |
+```
+http://localhost:5173
+```
 
-Full interactive documentation is available at `/docs` once the backend
-is running.
+---
 
-## Data Flow Summary
+# 🌐 API Modules
 
-1. HR uploads a document → text is extracted, chunked, embedded locally
-   via FastEmbed, and pushed into the matching domain's Qdrant collection
-2. An employee asks a question → the orchestrator classifies intent
-   (action vs. question, then domain) using an LLM call
-3. For document questions, the relevant domain's Qdrant collection is
-   searched (filtered to the employee's branch), and the LLM generates
-   an answer strictly from the retrieved passages, with citations
-4. For action requests, the LLM drafts the leave/expense text directly
-   and it's queued for HR review
+| Module       | Description               |
+| ------------ | ------------------------- |
+| 🔐 Auth      | Authentication & JWT      |
+| 👥 Users     | User Management           |
+| 🏢 Branches  | Branch Management         |
+| 📄 Documents | Upload & Manage Knowledge |
+| 💬 Chat      | AI Chat Interface         |
+| 📝 Actions   | Leave & Expense Approval  |
 
-## Deployment
+---
 
-- Backend: Docker + Render (see `backend/Dockerfile`)
-- Frontend: Vercel
-- `docker-compose.yml` is provided for local Postgres if preferred over
-  a native install
+# 🔄 Data Flow
 
-## Status
+```text
+HR Uploads Documents
+        │
+        ▼
+Text Extraction
+        │
+        ▼
+Chunking
+        │
+        ▼
+FastEmbed Embeddings
+        │
+        ▼
+Qdrant Vector Storage
+        │
+        ▼
+Employee Question
+        │
+        ▼
+Orchestrator Agent
+        │
+        ▼
+Specialist Agent
+        │
+        ▼
+Relevant Retrieval
+        │
+        ▼
+Grounded AI Response + Citations
+```
+---
 
-Phases 1–8 (backend) complete: scaffolding, database + auth, document
-ingestion, multi-agent orchestration, private chat history, and action
-requests are all implemented and tested. Frontend UI covers chat; an
-admin/HR panel for action requests and document management is in
-progress.
+# 👨‍💻 Contributors
+
+| Name                    | GitHub                            |
+| ----------------------- | --------------------------------- |
+| **Zain Ul Abideen**     | https://github.com/zain-maan      |
+| **Sara Nadeem**         | https://github.com/Sara407-collab |
+| **Abdullah Bin Zubair** | https://github.com/spectre0037    |
+
+---
+<p align="center">
+Made with ❤️ using FastAPI, React, PostgreSQL, Qdrant & AI
+</p>
