@@ -1,3 +1,22 @@
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:4F46E5,100:06B6D4&height=220&section=header&text=CorpMind&fontSize=55&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Role-Aware%20Multi-Agent%20Enterprise%20Knowledge%20Assistant&descAlignY=58" />
+</p>
+
+<div align="center">
+
+<p>
+  <img src="https://skillicons.dev/icons?i=react,vite,tailwind,py,fastapi,postgres,docker,git,github,vscode" />
+</p>
+
+<p>
+  <img src="https://img.shields.io/badge/AI-Multi--Agent-blue?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/RAG-Qdrant-success?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Auth-JWT-orange?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/License-Educational-red?style=for-the-badge" />
+</p>
+
+</div>
+
 # 🧠 CorpMind
 
 > **Role-Aware Multi-Agent Enterprise Knowledge Assistant**
